@@ -27,7 +27,7 @@ jobs:
           node tools/smoke.mjs | tee reporte-humo.txt
           node --test --test-concurrency=1 "server/tests/trampas.test.js" | tee -a reporte-humo.txt
       - name: Guardar corrida como evidencia (artefacto del informe de etapa)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: reporte-humo
           path: reporte-humo.txt
