@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cargarEnvDeRaiz } from './env.js';
+
+// Carga el .env de la raíz SOLO al arrancar el servidor real. Bajo pruebas
+// (importación del app con supertest) no se toca, para conservar el modo
+// demo determinista que la suite espera.
+cargarEnvDeRaiz();
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 

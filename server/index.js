@@ -4,6 +4,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { config, VERSION_SISTEMA } from './config.js';
 import { nucleo } from './api/rutas-core.js';
+import { vivoPrueba } from './api/vivo-prueba.js';
 import { documentos } from './api/rutas-documentos.js';
 import { casos } from './api/rutas-casos.js';
 import { arco } from './api/rutas-arco.js';
@@ -25,6 +26,7 @@ app.get('/api', (req, res) => {
       'GET /api/seed',
       'GET /api/registros?unidadId=',
       'POST /api/explicar',
+      'POST /api/vivo-prueba',
       'GET /api/idiomas/disponibilidad',
       'POST /api/voz/tts · POST /api/voz/transcribir',
       'POST /api/segment',
@@ -37,6 +39,7 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api', nucleo);
+app.use('/api', vivoPrueba);
 app.use('/api/documentos', documentos);
 app.use('/api/casos', casos);
 app.use('/api/arco', arco);

@@ -31,6 +31,67 @@ export function estadoMeta() {
   };
 }
 
+/**
+ * Variante que además devuelve el uso de tokens reportado por la API
+ * (`usage`), el `finish_reason` y la negativa (`refusal`) del modelo.
+ * El texto se extrae con extraerTextoContenido (cadena, bloques o null).
+ * No altera a chatCompletion: la ruta de /api/explicar queda intacta.
+ */
+/**
+ * Extrae el texto mostrable de un mensaje de chat completion.
+ * Formas OpenAI-compatibles: cadena, arreglo de bloques ({type: 'text',
+ * text: '…'}) o null cuando el modelo no produjo contenido (p. ej. el
+ * presupuesto de tokens se agotó en razonamiento interno con
+ * finish_reason=length). Nunca lanza: lo desconocido es cadena vacía y la
+ * causa real la reporta quien llama con finish_reason y usage.
+ */
+export function extraerTextoContenido(mensaje) {
+  const contenido = mensaje?.content;
+  if (typeof contenido === 'string') return contenido;
+  if (Array.isArray(contenido)) {
+    return contenido
+      .filter((b) => b && typeof b.text === 'string' && (b.type === undefined || b.type === 'text'))
+      .map((b) => b.text)
+      .join('');
+  }
+  return '';
+}
+
+export async function chatCompletionConUso(mensajes, { temperatura = 0.2, maxTokens = 900, promptVersion = '', timeoutMs = 0 } = {}) {
+  if (!config.meta.apiKey) {
+    throw new MetaApiError('META_NO_CONFIGURADA: sin META_API_KEY el sistema corre en modo demo.', { codigo: 'META_NO_CONFIGURADA' });
+  }
+  const respuesta = await fetch(`${config.meta.apiBase}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${config.meta.apiKey}`,
+    },
+    body: JSON.stringify({
+      model: config.meta.modelo,
+      messages: mensajes,
+      temperature: temperatura,
+      max_tokens: maxTokens,
+      metadata: promptVersion ? { prompt_version: promptVersion } : undefined,
+    }),
+    signal: timeoutMs > 0 ? AbortSignal.timeout(timeoutMs) : undefined,
+  });
+  if (respuesta.status === 402) {
+    throw new MetaApiError('402: créditos de la Meta Model API agotados. El protocolo ordena detenerse y reportar.', { estado: 402, codigo: 'SIN_CREDITOS' });
+  }
+  if (!respuesta.ok) {
+    const cuerpo = await respuesta.text().catch(() => '');
+    throw new MetaApiError(`Meta Model API respondió ${respuesta.status}: ${cuerpo.slice(0, 300)}`, { estado: respuesta.status });
+  }
+  const datos = await respuesta.json();
+  return {
+    texto: extraerTextoContenido(datos?.choices?.[0]?.message),
+    finishReason: datos?.choices?.[0]?.finish_reason ?? null,
+    negativa: datos?.choices?.[0]?.message?.refusal ?? null,
+    uso: datos?.usage ?? null,
+  };
+}
+
 export async function chatCompletion(mensajes, { temperatura = 0.2, maxTokens = 900, promptVersion = '' } = {}) {
   if (!config.meta.apiKey) {
     throw new MetaApiError('META_NO_CONFIGURADA: sin META_API_KEY el sistema corre en modo demo.', { codigo: 'META_NO_CONFIGURADA' });
