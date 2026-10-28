@@ -1,0 +1,9 @@
+{
+  "codigo": "ash",
+  "nombre": "Asháninka",
+  "nombreNativo": "Asháninka",
+  "estado": "paquete-inicial",
+  "estadoValidacion": "borrador",
+  "aviso": "Traducción en borrador — pendiente de validación por hablantes e intérpretes registrados. La terminología hídrica usa como ancla la Ley de Recursos Hídricos traducida por la ANA. Mientras tanto, la interfaz muestra el texto en español.",
+  "terminosGlosario": { "agua": "nija", "territorio": "kipatsi" }
+}

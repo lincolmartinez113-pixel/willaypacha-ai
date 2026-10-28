@@ -1,0 +1,9 @@
+{
+  "codigo": "qu",
+  "nombre": "Quechua",
+  "nombreNativo": "Runa simi",
+  "estado": "paquete-inicial",
+  "estadoValidacion": "borrador",
+  "aviso": "Traducción en borrador — pendiente de validación por hablantes e intérpretes registrados. Mientras tanto, la interfaz muestra el texto en español.",
+  "terminosGlosario": { "agua": "yaku", "río": "mayu", "tierra": "allpa / pacha" }
+}

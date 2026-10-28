@@ -1,0 +1,345 @@
+{
+  "meta": {
+    "nombre": "WillayPacha AI — datos semilla",
+    "fechaPreparacion": "2026-10-20",
+    "metodo": "data/fuentes-y-metodo.md",
+    "reglaOro": "Ningún dato se muestra sin fuente, fecha y cita. El modelo propone, el humano dispone.",
+    "notaHash": "El hash SHA-256 del documento oficial se adjunta al cargar el PDF primario en el repositorio. En esta instancia queda pendiente (null) y así se declara; no se fabrican hashes."
+  },
+  "normativas": {
+    "ecaAgua": {
+      "nombre": "Estándares de Calidad Ambiental (ECA) para Agua",
+      "norma": "Decreto Supremo N.° 004-2017-MINAM",
+      "notaHonestidad": "Los documentos históricos citan la norma de su época. La evaluación de causalidad de San Rafael aplica los ECA de 2008, categoría 3; la interfaz muestra la norma que la fuente citó, sin conversión silenciosa.",
+      "fuente": {
+        "organismo": "MINAM / El Peruano",
+        "documento": "D.S. N.° 004-2017-MINAM (ECA para Agua)",
+        "url": "https://www.gob.pe/institucion/minam/normas-legales/",
+        "busqueda": "Decreto Supremo 004-2017-MINAM ECA agua"
+      }
+    },
+    "lmpEfluentesMineros": {
+      "nombre": "Límites Máximos Permisibles para efluentes líquidos de actividades minero-metalúrgicas",
+      "norma": "Decreto Supremo N.° 010-2010-MINAM",
+      "notaUso": "Un efluente se contrasta contra LMP; el agua del cuerpo receptor, contra ECA según su categoría. Confundirlos es el error técnico más frecuente; el sistema está diseñado para no cometerlo.",
+      "fuente": {
+        "organismo": "MINAM / El Peruano",
+        "documento": "D.S. N.° 010-2010-MINAM, Anexo (valores según su publicación en El Peruano)",
+        "url": "https://www.gob.pe/institucion/minam/normas-legales/",
+        "busqueda": "Decreto Supremo 010-2010-MINAM efluentes minero-metalúrgicos"
+      },
+      "parametros": [
+        { "parametro": "pH", "unidad": "unidad", "limiteCualquierMomento": "6–9", "promedioAnual": "6–9" },
+        { "parametro": "Sólidos Totales en Suspensión", "unidad": "mg/L", "limiteCualquierMomento": "50", "promedioAnual": "25" },
+        { "parametro": "Aceites y Grasas", "unidad": "mg/L", "limiteCualquierMomento": "20", "promedioAnual": "16" },
+        { "parametro": "Cianuro Total", "unidad": "mg/L", "limiteCualquierMomento": "1", "promedioAnual": "0.8" },
+        { "parametro": "Arsénico Total", "unidad": "mg/L", "limiteCualquierMomento": "0.1", "promedioAnual": "0.08" },
+        { "parametro": "Cadmio Total", "unidad": "mg/L", "limiteCualquierMomento": "0.05", "promedioAnual": "0.04" },
+        { "parametro": "Cromo Hexavalente", "unidad": "mg/L", "limiteCualquierMomento": "0.1", "promedioAnual": "0.08" },
+        { "parametro": "Cobre Total", "unidad": "mg/L", "limiteCualquierMomento": "0.5", "promedioAnual": "0.4" },
+        { "parametro": "Hierro (disuelto)", "unidad": "mg/L", "limiteCualquierMomento": "2", "promedioAnual": "1.6" },
+        { "parametro": "Plomo Total", "unidad": "mg/L", "limiteCualquierMomento": "0.2", "promedioAnual": "0.16" },
+        { "parametro": "Mercurio Total", "unidad": "mg/L", "limiteCualquierMomento": "0.002", "promedioAnual": "0.0016" },
+        { "parametro": "Zinc Total", "unidad": "mg/L", "limiteCualquierMomento": "1.5", "promedioAnual": "1.2" }
+      ],
+      "notaProtocolo": "Los valores de «límite en cualquier momento» aplican a cualquier muestra colectada siempre que el muestreo y el análisis sigan el protocolo oficial de monitoreo de aguas y efluentes. La plataforma compara documentos e información, no muestras propias."
+    }
+  },
+  "territorios": [
+    {
+      "id": "altoandino",
+      "nombre": "Altoandino quechua (San Rafael, Puno)",
+      "lenguaPrincipal": "qu",
+      "estado": "activo"
+    },
+    {
+      "id": "amazonico",
+      "nombre": "Amazónico asháninka (Selva central, Junín)",
+      "lenguaPrincipal": "ash",
+      "estado": "activo"
+    },
+    {
+      "id": "altiplano",
+      "nombre": "Altiplano Sur aimara (Puno)",
+      "lenguaPrincipal": "ay",
+      "estado": "en-preparacion",
+      "leyenda": "Territorio en preparación: datos en carga y validación. Sin unidades verificadas aún: no se presenta ningún dato simulado como real."
+    }
+  ],
+  "unidades": [
+    {
+      "id": "san-rafael",
+      "territorioId": "altoandino",
+      "nombre": "Nueva Acumulación Quenamari – San Rafael",
+      "empresa": "Minsur S.A.",
+      "actividad": "Explotación subterránea de estaño (única productora de este metal en el Perú)",
+      "capacidad": "8 280 toneladas diarias de explotación",
+      "ubicacion": "Distrito de Antauta, provincia de Melgar, departamento de Puno, entre los 4 500 y 5 200 m s. n. m.",
+      "comunidadReferencia": "Comunidad campesina de Queracucho",
+      "cuenca": "Cuenca del río Ramis",
+      "lenguaContexto": "Quechua de Puno norte (referencia Cusco-Collao; el checkpoint de voz disponible es quz, quechua del Cusco — variedad no idéntica, se declara)",
+      "coordenadas": { "lat": -14.75, "lng": -70.58, "aproximadas": true, "nota": "Coordenadas aproximadas de referencia; reemplazar por las oficiales del instrumento de gestión al adjuntarlo" },
+      "motivoSeleccion": "OEFA publicó una Evaluación ambiental de causalidad del área de influencia de la unidad (agua superficial, subterránea, sedimentos y comunidades hidrobiológicas), verificada en el repositorio institucional durante la preparación",
+      "certificacion": "Ante SENACE tramita la modificación del EIA detallado, con evaluación ambiental preliminar de una quinta modificación orientada a extender la vida útil más allá de 2028",
+      "componentes": [
+        { "id": "bocamina-quenamari", "tipo": "bocamina", "nombre": "Bocamina Nueva Acumulación Quenamari", "coordenadas": { "lat": -14.752, "lng": -70.582, "aproximadas": true } },
+        { "id": "relavera-san-rafael", "tipo": "relavera", "nombre": "Relavera de la unidad San Rafael", "coordenadas": { "lat": -14.745, "lng": -70.575, "aproximadas": true } },
+        { "id": "efluente-p4", "tipo": "punto-vertimiento", "nombre": "Efluente minero P-4", "coordenadas": { "lat": -14.748, "lng": -70.579, "aproximadas": true } },
+        { "id": "quebrada-chognacota", "tipo": "cuerpo-agua", "nombre": "Quebrada Chogñacota", "coordenadas": { "lat": -14.76, "lng": -70.59, "aproximadas": true } },
+        { "id": "microcuenca-larancota", "tipo": "cuerpo-agua", "nombre": "Microcuenca Larancota", "coordenadas": { "lat": -14.738, "lng": -70.566, "aproximadas": true } },
+        { "id": "comunidad-queracucho", "tipo": "comunidad", "nombre": "Comunidad campesina de Queracucho", "coordenadas": { "lat": -14.73, "lng": -70.6, "aproximadas": true } }
+      ]
+    },
+    {
+      "id": "san-vicente",
+      "territorioId": "amazonico",
+      "nombre": "San Vicente",
+      "empresa": "Compañía Minera San Ignacio de Morococha S.A.A. (SIMSA)",
+      "actividad": "Explotación subterránea de zinc y plomo (unidad fiscalizable)",
+      "capacidad": null,
+      "ubicacion": "Distrito de Vitoc, provincia de Chanchamayo, departamento de Junín, cercanías de San Ramón, ceja de selva",
+      "comunidadReferencia": "Comunidades asháninkas del ámbito Perené–Chanchamayo (contexto lingüístico: Pampa Michi, Marankiari, Shankivironi, San Jerónimo)",
+      "cuenca": "Ámbito hidrográfico de la selva central (Perené)",
+      "lenguaContexto": "Asháninka del Perené (el checkpoint de voz disponible es cni, asháninka general — variedad no idéntica, se declara)",
+      "coordenadas": { "lat": -11.15, "lng": -75.4, "aproximadas": true, "nota": "Coordenadas aproximadas de referencia; reemplazar por las oficiales al adjuntar el expediente" },
+      "motivoSeleccion": "Cadena procesal completa, pública y reciente ante OEFA (2024–2025), ideal para la línea de tiempo de fiscalización que la comunidad necesita entender",
+      "certificacion": null,
+      "componentes": [
+        { "id": "unidad-san-vicente", "tipo": "bocamina", "nombre": "Unidad San Vicente (explotación subterránea)", "coordenadas": { "lat": -11.15, "lng": -75.4, "aproximadas": true } },
+        { "id": "comunidades-ashaninka-vitoc", "tipo": "comunidad", "nombre": "Comunidades asháninkas del ámbito Perené–Chanchamayo", "coordenadas": { "lat": -11.12, "lng": -75.36, "aproximadas": true } }
+      ]
+    }
+  ],
+  "semforoReglas": {
+    "rojo": "Hallazgo oficial vigente que supera un estándar, o medida/sanción firme.",
+    "ambar": "Procedimiento en curso, atribución dudosa o información desactualizada.",
+    "verde": "Evaluación oficial sin hallazgo negativo o compromiso verificado como cumplido.",
+    "leyenda": "El semáforo evalúa el contenido de la información oficial disponible. No existe nota ni ranking de empresas."
+  },
+  "registros": [
+    {
+      "id": "SR-001-chognacota-agua",
+      "unidadId": "san-rafael",
+      "tipo": "hallazgo",
+      "cuerpoAgua": "Quebrada Chogñacota (agua superficial)",
+      "componente": "Efluente minero P-4",
+      "parametro": "Fluoruros, sulfatos y calcio",
+      "estandar": "ECA para Agua de 2008, categoría 3 (norma citada por la fuente)",
+      "hecho": "Superación de los ECA de 2008 (categoría 3); el estudio determina que el origen proviene directamente del efluente minero P-4",
+      "fecha": "2014",
+      "fechaNota": "Fecha de la evaluación de causalidad; confirmar la fecha exacta del documento al adjuntar el PDF primario",
+      "citaLiteral": "Fluoruros, sulfatos y calcio superaron los Estándares de Calidad Ambiental para Agua de 2008 (categoría 3); el estudio determina que su origen proviene directamente del efluente minero P-4",
+      "citaPagina": "por confirmar en el documento primario",
+      "semaforo": "rojo",
+      "semaforoRegla": "rojo: hallazgo oficial vigente que supera un estándar, con atribución del organismo",
+      "atribucion": "Según la evaluación de causalidad de OEFA, el origen proviene directamente del efluente minero P-4",
+      "estadoProcesal": "Hallazgo de evaluación técnica publicada; el sistema no declara sanción ni responsabilidad legal",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Evaluación ambiental de causalidad del área de influencia de la UM Nueva Acumulación Quenamari – San Rafael",
+        "url": "https://www.gob.pe/institucion/oefa/",
+        "busqueda": "Evaluación ambiental de causalidad Nueva Acumulación Quenamari San Rafael"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar el PDF primario; no se fabrica hash"
+    },
+    {
+      "id": "SR-002-larancota-agua",
+      "unidadId": "san-rafael",
+      "tipo": "sin-hallazgo",
+      "cuerpoAgua": "Microcuenca Larancota (agua superficial)",
+      "componente": "Depósito de desmonte; efluente doméstico",
+      "parametro": "Calidad del agua superficial",
+      "estandar": "ECA para Agua de 2008, categoría 3 (marco de referencia del estudio)",
+      "hecho": "No se registró influencia negativa del depósito de desmonte ni del efluente doméstico sobre la calidad del agua superficial",
+      "fecha": "2014",
+      "fechaNota": "Fecha de la evaluación de causalidad; confirmar al adjuntar el documento primario",
+      "citaLiteral": "No se registró influencia negativa del depósito de desmonte ni del efluente doméstico sobre la calidad del agua superficial",
+      "citaPagina": "por confirmar en el documento primario",
+      "semaforo": "verde",
+      "semaforoRegla": "verde: evaluación oficial sin hallazgo negativo",
+      "atribucion": "Según la evaluación de causalidad de OEFA",
+      "estadoProcesal": "Resultado de evaluación técnica; un resultado sin hallazgo también es información que la comunidad merece escuchar con claridad",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Evaluación ambiental de causalidad del área de influencia de la UM Nueva Acumulación Quenamari – San Rafael",
+        "url": "https://www.gob.pe/institucion/oefa/",
+        "busqueda": "Evaluación ambiental de causalidad Nueva Acumulación Quenamari San Rafael"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar el PDF primario; no se fabrica hash"
+    },
+    {
+      "id": "SR-003-sedimentos",
+      "unidadId": "san-rafael",
+      "tipo": "hallazgo-matizado",
+      "cuerpoAgua": "Sedimentos (matriz)",
+      "componente": "Sedimentos de la zona de influencia",
+      "parametro": "Arsénico, cobre, níquel, plomo y zinc",
+      "estandar": "Guías internacionales de referencia (citadas por el estudio)",
+      "hecho": "Superación de valores de guías internacionales de referencia, hallados principalmente en la fracción residual del sedimento; el estudio concluyó origen natural, litológico y edáfico",
+      "fecha": "2014",
+      "fechaNota": "Fecha de la evaluación de causalidad; confirmar al adjuntar el documento primario",
+      "citaLiteral": "Arsénico, cobre, níquel, plomo y zinc excedieron valores de guías internacionales de referencia, pero se hallaron principalmente en la fracción residual del sedimento: se concluyó origen natural, litológico y edáfico",
+      "citaPagina": "por confirmar en el documento primario",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: superación de una referencia sin atribución a la operación; enseña la diferencia entre «valor alto» y «responsabilidad»",
+      "atribucion": "Según la evaluación de causalidad de OEFA; sin atribución a la operación minera",
+      "estadoProcesal": "Conclusión técnica del estudio; sin atribución de responsabilidad",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Evaluación ambiental de causalidad del área de influencia de la UM Nueva Acumulación Quenamari – San Rafael",
+        "url": "https://www.gob.pe/institucion/oefa/",
+        "busqueda": "Evaluación ambiental de causalidad Nueva Acumulación Quenamari San Rafael"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar el PDF primario; no se fabrica hash"
+    },
+    {
+      "id": "SR-004-hidrobiologicas",
+      "unidadId": "san-rafael",
+      "tipo": "hallazgo-matizado",
+      "cuerpoAgua": "Cuerpos de agua de la zona de influencia (comunidades hidrobiológicas)",
+      "componente": "Comunidades hidrobiológicas",
+      "parametro": "Calidad ecológica",
+      "estandar": "Marco del estudio de causalidad",
+      "hecho": "La calidad ecológica varió de pésima a muy buena según el tramo evaluado",
+      "fecha": "2014",
+      "fechaNota": "Fecha de la evaluación de causalidad; confirmar al adjuntar el documento primario",
+      "citaLiteral": "La calidad ecológica varió de pésima a muy buena según el tramo evaluado",
+      "citaPagina": "por confirmar en el documento primario",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: resultado no uniforme; los resultados no se simplifican en un solo titular",
+      "atribucion": "Según la evaluación de causalidad de OEFA",
+      "estadoProcesal": "Conclusión técnica del estudio",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Evaluación ambiental de causalidad del área de influencia de la UM Nueva Acumulación Quenamari – San Rafael",
+        "url": "https://www.gob.pe/institucion/oefa/",
+        "busqueda": "Evaluación ambiental de causalidad Nueva Acumulación Quenamari San Rafael"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar el PDF primario; no se fabrica hash"
+    },
+    {
+      "id": "SR-005-senace-quinta",
+      "unidadId": "san-rafael",
+      "tipo": "certificacion",
+      "cuerpoAgua": null,
+      "componente": "Expediente de certificación ambiental",
+      "parametro": "Modificación del EIA detallado (quinta modificación)",
+      "estandar": "SEIA (Sistema Nacional de Evaluación de Impacto Ambiental)",
+      "hecho": "Ante SENACE tramita la modificación del EIA detallado, con evaluación ambiental preliminar de una quinta modificación orientada a extender la vida útil de la unidad más allá de 2028, ampliando su área efectiva aprobada",
+      "fecha": "en trámite",
+      "fechaNota": "Estado al 20/10/2026; actualizar con la resolución al adjuntar el expediente EVA",
+      "citaLiteral": "Ante SENACE tramita la modificación de su estudio de impacto ambiental detallado —con evaluación ambiental preliminar de una quinta modificación orientada a extender la vida útil de la unidad más allá de 2028, ampliando su área efectiva aprobada—",
+      "citaPagina": "por confirmar en la plataforma EVA",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: procedimiento en curso",
+      "atribucion": "Según el expediente público en la plataforma EVA de SENACE",
+      "estadoProcesal": "Procedimiento de certificación ambiental en trámite; no es un hallazgo de fiscalización",
+      "fuente": {
+        "organismo": "SENACE",
+        "documento": "Plataforma EVA — expediente de modificación del EIA detallado, UM Nueva Acumulación Quenamari – San Rafael",
+        "url": "https://www.gob.pe/institucion/senace/",
+        "busqueda": "EVA SENACE San Rafael Minsur quinta modificación EIA"
+      },
+      "confianza": "media",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar el expediente; no se fabrica hash"
+    },
+    {
+      "id": "SV-001-medidas-preventivas-2024",
+      "unidadId": "san-vicente",
+      "tipo": "acto-fiscalizacion",
+      "cuerpoAgua": null,
+      "componente": "Procedimiento de fiscalización (expediente 0016-2023-DSEM-CMIN)",
+      "parametro": "Medidas preventivas N.° 1, 2, 3 y 4",
+      "estandar": "Ley N.° 27446, Ley del SINEFA (marco de la fiscalización ambiental)",
+      "hecho": "Se ordenaron las medidas preventivas N.° 1, 2, 3 y 4 a SIMSA. Una medida preventiva no es una sanción",
+      "fecha": "2024-08-28",
+      "fechaNota": "Fecha del acto administrativo",
+      "citaLiteral": "Resolución N.° 0190-2024-OEFA/DSEM (expediente 0016-2023-DSEM-CMIN) — Ordena las medidas preventivas N.° 1, 2, 3 y 4 a SIMSA",
+      "citaPagina": "por confirmar en la resolución publicada",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: procedimiento en curso; una medida preventiva no es una sanción",
+      "atribucion": "Según la Resolución N.° 0190-2024-OEFA/DSEM",
+      "estadoProcesal": "Medida preventiva ordenada; posteriormente materia de reconsideración y del tribunal (ver SV-002 y SV-003). La historia completa se cuenta con las tres resoluciones, en orden y con sus efectos",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Resolución N.° 0190-2024-OEFA/DSEM — expediente 0016-2023-DSEM-CMIN",
+        "url": "https://www.gob.pe/institucion/oefa/informes-y-resoluciones/",
+        "busqueda": "Resolución 0190-2024 OEFA DSEM San Vicente SIMSA"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar la resolución; no se fabrica hash"
+    },
+    {
+      "id": "SV-002-reconsideracion-2025",
+      "unidadId": "san-vicente",
+      "tipo": "acto-fiscalizacion",
+      "cuerpoAgua": null,
+      "componente": "Procedimiento de reconsideración",
+      "parametro": "Medidas preventivas N.° 1, 2, 3 y 4",
+      "estandar": "Ley N.° 27446, Ley del SINEFA",
+      "hecho": "Se declaró fundada en parte la reconsideración de la empresa respecto de las medidas 1, 2 y 3, e infundada respecto de la medida preventiva N.° 4. Una reconsideración fundada en parte no es una absolución",
+      "fecha": "2025-07-10",
+      "fechaNota": "Fecha del acto administrativo",
+      "citaLiteral": "Resolución N.° 00157-2025-OEFA/DSEM — Declara fundada en parte la reconsideración de la empresa (medidas 1, 2 y 3) e infundada respecto de la medida preventiva N.° 4",
+      "citaPagina": "por confirmar en la resolución publicada",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: procedimiento en curso; reconsideración parcial no es absolución",
+      "atribucion": "Según la Resolución N.° 00157-2025-OEFA/DSEM",
+      "estadoProcesal": "Reconsideración resuelta parcialmente; la medida N.° 4 permaneció; el tribunal revisó después (ver SV-003)",
+      "fuente": {
+        "organismo": "OEFA",
+        "documento": "Resolución N.° 00157-2025-OEFA/DSEM",
+        "url": "https://www.gob.pe/institucion/oefa/informes-y-resoluciones/",
+        "busqueda": "Resolución 00157-2025 OEFA DSEM San Vicente"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar la resolución; no se fabrica hash"
+    },
+    {
+      "id": "SV-003-tribunal-2025",
+      "unidadId": "san-vicente",
+      "tipo": "acto-fiscalizacion",
+      "cuerpoAgua": null,
+      "componente": "Tribunal de Fiscalización Ambiental",
+      "parametro": "Revisión en instancia de tribunal",
+      "estandar": "Ley N.° 27446, Ley del SINEFA",
+      "hecho": "El Tribunal de Fiscalización Ambiental enmendó el artículo primero de la parte resolutiva de la resolución de 2024 y confirmó la resolución de 2025. Una confirmación en apelación no agota necesariamente la historia",
+      "fecha": "2025-10-28",
+      "fechaNota": "Fecha del acto administrativo",
+      "citaLiteral": "Resolución N.° 578-2025-OEFA/TFA-SE — Enmienda el artículo primero de la parte resolutiva de la resolución de 2024 y confirma la de 2025",
+      "citaPagina": "por confirmar en la resolución publicada",
+      "semaforo": "ambar",
+      "semaforoRegla": "ámbar: la historia procesal se muestra con sus fechas y deja que el documento hable",
+      "atribucion": "Según la Resolución N.° 578-2025-OEFA/TFA-SE (Tribunal de Fiscalización Ambiental)",
+      "estadoProcesal": "Resolución de tribunal registrada; el sistema muestra el estado procesal con fecha y no califica el resultado como absolución ni condena",
+      "fuente": {
+        "organismo": "OEFA — Tribunal de Fiscalización Ambiental",
+        "documento": "Resolución N.° 578-2025-OEFA/TFA-SE",
+        "url": "https://www.gob.pe/institucion/oefa/informes-y-resoluciones/",
+        "busqueda": "Resolución 578-2025 OEFA TFA San Vicente"
+      },
+      "confianza": "alta",
+      "fechaConsulta": "2026-10-20",
+      "hashDocumento": null,
+      "hashNota": "Pendiente de adjuntar la resolución; no se fabrica hash"
+    }
+  ]
+}

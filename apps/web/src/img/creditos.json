@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "fuente": "Wikimedia Commons (licencias Creative Commons / dominio público con autoría declarada)",
+    "nota": "Imágenes referenciales del territorio y las actividades, NO fotodocumento de los puntos exactos de monitoreo. Cada archivo fue descargado desde el título exacto citado: lo que se ve es lo que se cita. La fuente primaria del dato ambiental sigue siendo el documento citado en cada registro. Formatos servidos en WebP (q80, máx. 1600 px) para reducir peso; los originales JPG se conservan en el repositorio como fuente de la conversión.",
+    "generado": "2026-10-21",
+    "descartadas": "Dos descargas iniciales se descartaron por no corresponder al tema (una polilla y un estampilla postal); no se usan ni se citan.",
+    "verificado": "2026-10-21T20:19:52.498Z"
+  },
+  "fotos": [
+    {
+      "archivo": "img/hero-altiplano.webp",
+      "titulo": "Amanecer en el lago Titicaca, Puno, Perú, 2015-08-01, DD 03",
+      "autor": "Diego Delso",
+      "licencia": "CC BY-SA 4.0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Amanecer_en_el_lago_Titicaca,_Puno,_Per%C3%BA,_2015-08-01,_DD_03.jpg",
+      "pie": "Territorio altoandino: altiplano puneño, cuenca Titicaca–Ramis (imagen referencial del territorio, no del punto exacto de monitoreo)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/quechua-textil.webp",
+      "titulo": "Peru - Lares Trek 008 - looking back down on the pueblo of Cancha Cancha (7584220954)",
+      "autor": "McKay Savage from London, UK",
+      "licencia": "CC BY 2.0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Peru_-_Lares_Trek_008_-_looking_back_down_on_the_pueblo_of_Cancha_Cancha_(7584220954).jpg",
+      "pie": "Tejido andino: la lengua y la cultura del territorio altoandino (imagen referencial)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/mineria-subterranea.webp",
+      "titulo": "Tunnel train track crossing",
+      "autor": "Saracen1608",
+      "licencia": "CC BY-SA 3.0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Tunnel_train_track_crossing.jpg",
+      "pie": "Labor minera subterránea: vagonetas y ducto de ventilación (imagen referencial del tipo de actividad, no de la unidad)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/selva-central.webp",
+      "titulo": "Espejos de agua Reserva Paisajistica Nor Yauyos Cochas",
+      "autor": "Ozesama",
+      "licencia": "CC BY-SA 4.0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Espejos_de_agua_Reserva_Paisajistica_Nor_Yauyos_Cochas.jpg",
+      "pie": "Cuerpos de agua de altura: lagunas y cascadas como las que comunidades y autoridad vigilan (imagen referencial del agua, no de la unidad ni de la región)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/rio-perene.webp",
+      "titulo": "Part of the expedition at Puerto Silva, along the Perené River",
+      "autor": "César Cipriani",
+      "licencia": "CC0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Part_of_the_expedition_at_Puerto_Silva,_along_the_Peren%C3%A9_River.jpg",
+      "pie": "Río Perené — fotografía histórica de archivo de la selva central, ámbito de la unidad San Vicente (imagen de archivo)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/altiplano-ganado.webp",
+      "titulo": "Alpaca (Vicugna pacos), Laguna de Salinas, Arequipa, Perú, 2015-08-02, DD 43",
+      "autor": "Diego Delso",
+      "licencia": "CC BY-SA 4.0",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Alpaca_(Vicugna_pacos),_Laguna_de_Salinas,_Arequipa,_Per%C3%BA,_2015-08-02,_DD_43.jpg",
+      "pie": "Ganadería andina de altura — alpacas: el agua une mina, ganado y cultivos (imagen referencial)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/relaves.webp",
+      "titulo": "Syncrude mildred lake settling pond",
+      "autor": "TastyCakes (fotógrafo), Jamitzky (subsecuente edición)",
+      "licencia": "Dominio público",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Syncrude_mildred_lake_settling_pond.jpg",
+      "pie": "Presa de relaves (imagen referencial del tipo de infraestructura; fotografía de otra operación, no de la unidad)",
+      "fuente": "Wikimedia Commons"
+    },
+    {
+      "archivo": "img/paisaje-rio.webp",
+      "titulo": "Andes 70.98343W 35.78028S",
+      "autor": "no declarado (dominio público)",
+      "licencia": "Public domain",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Andes_70.98343W_35.78028S.jpg",
+      "pie": "Paisaje de altura: el territorio por el que corren las quebradas de los registros (imagen referencial)",
+      "fuente": "Wikimedia Commons"
+    }
+  ]
+}

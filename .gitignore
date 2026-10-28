@@ -1,0 +1,25 @@
+# Dependencias y construcciones
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Entorno y secretos — NUNCA versionados (ver .env.example)
+.env
+.env.*
+!.env.example
+
+# Estado dinámico en tiempo de ejecución (no es dato semilla)
+server/data/
+
+# Sistema
+.DS_Store
+Thumbs.db
+# Respaldos y temporales locales, fuera del repo
+*.pre-*
+*.respaldo*
+respaldo*/
+resultado-auditoria.txt
+verificador-base64.txt
+diagnostico-*.txt
+auditar-codificacion.cjs
+apps/web/standalone/

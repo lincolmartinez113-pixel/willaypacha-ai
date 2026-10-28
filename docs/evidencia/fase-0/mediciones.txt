@@ -1,0 +1,16 @@
+movil radar: ✓ scrollW=421 vw=421 · img sin alt=6 · controles sin nombre=0 · campos sin etiqueta=0
+movil rimay: ✓ scrollW=461 vw=461 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+movil evidencia: ✓ scrollW=390 vw=390 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+movil documentos: ✓ scrollW=390 vw=390 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=1
+movil casos: ✓ scrollW=390 vw=390 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+movil denunciar: ✓ scrollW=390 vw=390 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+movil legal: ✓ scrollW=390 vw=390 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+movil: excepciones JS = 0
+tablet radar: ✓ scrollW=820 vw=820 · img sin alt=6 · controles sin nombre=0 · campos sin etiqueta=0
+tablet rimay: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+tablet evidencia: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+tablet documentos: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=1
+tablet casos: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+tablet denunciar: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+tablet legal: ✓ scrollW=820 vw=820 · img sin alt=0 · controles sin nombre=0 · campos sin etiqueta=0
+tablet: excepciones JS = 0

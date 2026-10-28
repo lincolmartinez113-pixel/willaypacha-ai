@@ -1,0 +1,23 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  construir-y-probar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Verificación de datos (falla si falta fuente, fecha, cita o confianza)
+        run: npm run verificar-datos
+      - name: Escaneo de secretos
+        run: node tools/escanear-secretos.mjs
+      - name: Pruebas (incluye batería de 10 preguntas trampa)
+        run: node --test --test-concurrency=1 "server/tests/*.test.js"
+      - name: Construcción con verificación de tipos
+        run: npm run build
+      - name: Auditoría de dependencias (sin críticos)
+        run: npm audit --audit-level=critical

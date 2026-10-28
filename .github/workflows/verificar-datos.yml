@@ -1,0 +1,26 @@
+name: verificar-datos
+on:
+  push:
+    paths:
+      - 'data/**'
+      - 'i18n/**'
+      - 'tools/verificar-datos.mjs'
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'i18n/**'
+
+jobs:
+  datos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node tools/verificar-datos.mjs
+      - name: Resumen
+        if: always()
+        run: |
+          echo "Regla del proyecto: si a un registro visible le falta fuente, fecha o" >> $GITHUB_STEP_SUMMARY
+          echo "nivel de confianza, la construcción falla. Sin fuente, fuera de la demo." >> $GITHUB_STEP_SUMMARY

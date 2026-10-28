@@ -1,0 +1,13 @@
+✓ Backend (8787) y frontend de desarrollo (5173) arriba
+✓ Módulo A (Radar) renderiza — captura docs/evidencia/01-radar.png
+✓ Módulo B (Rimay) renderiza y responde con cita de OEFA vía /api/explicar — 02-rimay.png
+✓ Módulo C (Evidencia) renderiza
+✓ Módulo D (Documentos): borrador creado desde la interfaz con Registro de Generación — 03-documentos.png
+✓ Módulo E (Casos) renderiza
+✓ Páginas legales renderizan con contenido real
+✓ Guía de denuncia renderiza con la ruta completa — 06-denunciar.png
+✓ Evaluador genera hoja de ruta imprimible — 06b-hoja-de-ruta.png
+✓ Directorio de autoridades con redes verificadas — 07-directorio.png
+✓ Página de créditos de imágenes renderiza — 05-creditos.png
+✓ Archivo ÚNICO abierto con file:// (doble clic) renderiza — 04-standalone-doble-clic.png
+✓ Sin excepciones JS sin capturar en ninguna página visitada

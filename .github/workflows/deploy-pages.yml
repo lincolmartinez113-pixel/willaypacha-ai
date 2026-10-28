@@ -1,0 +1,44 @@
+name: deploy-pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/web/**'
+      - 'data/**'
+      - 'i18n/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Verificación de datos y pruebas (nada se publica sin verificar)
+        run: |
+          node tools/verificar-datos.mjs
+          node --test --test-concurrency=1 "server/tests/*.test.js"
+      - name: Archivo único (rutas hash compatibles con Pages)
+        run: npm run build:standalone
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/standalone
+      - id: deployment
+        uses: actions/deploy-pages@v4

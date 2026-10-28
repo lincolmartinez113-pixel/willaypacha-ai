@@ -1,0 +1,29 @@
+{
+  "codigo": "es",
+  "nombre": "Español",
+  "nombreNativo": "Español",
+  "estado": "completo",
+  "estadoValidacion": "validado",
+  "menu": {
+    "radar": "Radar de Transparencia",
+    "rimay": "Asistente de voz (Rimay)",
+    "evidencia": "Laboratorio de Evidencia",
+    "documentos": "Documentos y Expertos",
+    "casos": "Casos de la Comunidad"
+  },
+  "comunes": {
+    "semaforo": { "rojo": "Hallazgo oficial vigente", "ambar": "Procedimiento en curso", "verde": "Sin hallazgo negativo" },
+    "fuente": "Fuente",
+    "cita": "Cita literal",
+    "fecha": "Fecha",
+    "consulta": "Consultado el",
+    "confianza": "Confianza",
+    "abrirFuente": "Abrir fuente primaria",
+    "noConsta": "No consta",
+    "borrador": "Borrador",
+    "validado": "Validado",
+    "coordenadasAproximadas": "Coordenadas aproximadas",
+    "vozSintetica": "voz sintética — modelo MMS de Meta",
+    "generadoConIA": "Generado con asistencia de IA — requiere revisión de especialista"
+  }
+}

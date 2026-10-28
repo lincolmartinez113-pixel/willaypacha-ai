@@ -1,0 +1,42 @@
+{
+  "name": "willaypacha-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "WillayPacha AI — Monitoreo ambiental comunitario y justicia indígena en el Perú. Información pública con fuente, fecha y cita; explicación en español, quechua, aimara y asháninka; documentos borrador con revisión experta.",
+  "scripts": {
+    "dev:web": "vite --config apps/web/vite.config.ts",
+    "dev:server": "node server/index.js",
+    "build": "tsc --noEmit -p apps/web && vite build --config apps/web/vite.config.ts",
+    "build:standalone": "vite build --config apps/web/vite.config.standalone.ts",
+    "test:visual": "node tools/verificar-visual.mjs",
+    "verificar-datos": "node tools/verificar-datos.mjs",
+    "test": "node tools/verificar-datos.mjs && node --test --test-concurrency=1 \"server/tests/*.test.js\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "leaflet": "^1.9.4",
+    "multer": "^2.4.0",
+    "pdfkit": "^0.20.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "playwright": "^1.64.1",
+    "supertest": "^7.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

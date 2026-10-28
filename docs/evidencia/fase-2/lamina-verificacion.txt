@@ -1,0 +1,4 @@
+Lámina exportable verificada el 2026-10-21T23:22:14.911Z
+Fixture: tools/fijacion-exif.jpg (EXIF GPS S 14°45′ W 70°34′48″)
+Archivo resultante: C:\Users\KATANA\AppData\Roaming\AutoClaw-oversea-official\accounts\1537178b85d76ffed480abb06190625ab8321660b090f0b1dc4b2f4871641cbc\projects\Default\willaypacha-ai\docs\evidencia\fase-2\lamina-exportada.png (46 KB)
+Paleta: tokens cálidos (--panel/--acento/--texto*) vía src/tema.ts

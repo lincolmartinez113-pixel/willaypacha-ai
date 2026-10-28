@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "descripcion": "Glosario técnico del proyecto. Crece SOLO con términos validados, registrando quién validó y cuándo. Referencia institucional: registro nacional de traductores e intérpretes de lenguas indígenas del Ministerio de Cultura. Toda salida del explicador P3 usa exclusivamente este glosario; lo que no está aquí permanece en español entre paréntesis.",
+    "anclaAshaninka": "La terminología hídrica asháninka tiene un ancla oficial: la Ley de Recursos Hídricos traducida por la ANA; el proyecto reutiliza su terminología citándola en lugar de inventar equivalencias paralelas.",
+    "notaVariedades": "qu = quechua (referencia escrita quechua sur); ay = aimara central; ash = asháninka. La validación por hablantes es obligatoria antes de usar cualquiera de estos términos en material público."
+  },
+  "terminos": {
+    "agua": {
+      "qu": { "valor": "yaku", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación por hablante o intérprete registrado", "validadoEl": null },
+      "ay": { "valor": "uma", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación por hablante o intérprete registrado", "validadoEl": null },
+      "ash": { "valor": "nija", "estado": "borrador", "respaldadoPor": "semilla del proyecto — cruzar con la terminología de la Ley de Recursos Hídricos traducida por la ANA", "validadoEl": null }
+    },
+    "río": {
+      "qu": { "valor": "mayu", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ay": { "valor": "jawira", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ash": { "valor": null, "estado": "borrador", "respaldadoPor": "pendiente: los términos locales los confirma el validador; usar la terminología de la ley traducida por la ANA", "validadoEl": null }
+    },
+    "tierra": {
+      "qu": { "valor": "allpa / pacha", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ay": { "valor": "uraqi / pacha", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ash": { "valor": "kipatsi", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null }
+    },
+    "territorio": {
+      "qu": { "valor": "pacha", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ay": { "valor": "pacha", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null },
+      "ash": { "valor": "kipatsi", "estado": "borrador", "respaldadoPor": "semilla del proyecto — pendiente de validación", "validadoEl": null }
+    }
+  }
+}

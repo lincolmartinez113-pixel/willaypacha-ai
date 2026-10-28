@@ -1,0 +1,33 @@
+name: demo-smoke
+on:
+  workflow_dispatch:
+    inputs:
+      meta_api_key:
+        description: 'Opcional: clave de la Meta Model API para correr en vivo (por defecto, modo demo)'
+        required: false
+        default: ''
+
+jobs:
+  humo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Motor del proyecto (explicar + batería de 10 preguntas trampa)
+        env:
+          # Sin clave: la batería corre contra el explicador demo declarado.
+          # Con clave (input): corre en vivo contra la Meta Model API.
+          # Si responde 402 (créditos), la corrida falla y queda como evidencia:
+          # el protocolo prohíbe sustituir el proveedor de modelos.
+          META_API_KEY: ${{ inputs.meta_api_key }}
+        run: |
+          node tools/smoke.mjs | tee reporte-humo.txt
+          node --test --test-concurrency=1 "server/tests/trampas.test.js" | tee -a reporte-humo.txt
+      - name: Guardar corrida como evidencia (artefacto del informe de etapa)
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-humo
+          path: reporte-humo.txt

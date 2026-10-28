@@ -1,0 +1,9 @@
+{
+  "codigo": "ay",
+  "nombre": "Aimara",
+  "nombreNativo": "Aymar aru",
+  "estado": "paquete-inicial",
+  "estadoValidacion": "borrador",
+  "aviso": "Traducción en borrador — pendiente de validación por hablantes e intérpretes registrados. Mientras tanto, la interfaz muestra el texto en español.",
+  "terminosGlosario": { "agua": "uma", "río": "jawira", "tierra": "uraqi / pacha" }
+}

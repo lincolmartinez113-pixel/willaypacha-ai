@@ -1,0 +1,17 @@
+contraste texto/panel: 15.83 ✓ AA
+contraste texto-2/panel: 10.18 ✓ AA
+contraste texto-3/panel: 6.92 ✓ AA
+contraste texto-4/panel: 5.33 ✓ AA
+contraste acento/panel: 8.27 ✓ AA
+contraste rojo/velo: 5.93 ✓ AA
+contraste ambar/velo: 8.28 ✓ AA
+contraste verde/velo: 8.61 ✓ AA
+data-tema tras recarga: noche
+tesela del mapa: openstreetmap ✓ · filtro noche: aplicado ✓
+captura radar-noche.png
+captura rimay-noche.png
+captura denunciar-noche.png
+tras pulsar «Papel»: data-tema=papel · localStorage=papel
+desborde escritorio: ✓ (1280/1280)
+desborde móvil: ✓ (390/390)
+excepciones JS: 0
