@@ -30,7 +30,7 @@ app.get('/api', (req, res) => {
       'GET /api/idiomas/disponibilidad',
       'POST /api/voz/tts · POST /api/voz/transcribir',
       'POST /api/segment',
-      'GET|POST /api/documentos · GET /api/documentos/:id/pdf · POST /api/documentos/:id/revision',
+      'GET|POST /api/documentos · GET /api/documentos/:id/pdf · GET /api/documentos/registro/:registroId/pdf · POST /api/documentos/:id/revision',
       'GET|POST /api/casos · POST /api/casos/:id/revision · POST /api/casos/:id/retirar',
       'POST /api/arco/solicitud · POST /api/arco/:id/ejecutar',
       'POST /api/rectificaciones · GET /api/bitacora/:registroId',

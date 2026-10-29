@@ -4,6 +4,7 @@ import { leerSeed } from '../config.js';
 import { estadoMeta } from './meta-client.js';
 import { versionPrompt } from './prompts.js';
 import { generarPdf, guardarPdf, leerPdf } from '../pdf/generador.js';
+import { construirFicha, generarPdfFicha } from '../pdf/ficha-registro.js';
 import { requerirRol } from './rutas-core.js';
 
 export const documentos = Router();
@@ -83,6 +84,30 @@ documentos.post('/', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'no se pudo generar el documento', detalle: String(error.message) });
+  }
+});
+
+// Ficha de UN registro verificado (PDF descargable, sin estado: no entra a
+// la bandeja ni a la bitácora). Sin datos → 404; si P6 bloquea el resumen
+// → 422 declarado. En ningún caso se genera un PDF con texto inventado.
+documentos.get('/registro/:registroId/pdf', async (req, res) => {
+  try {
+    const ficha = construirFicha(req.params.registroId);
+    if (ficha.noEncontrado) {
+      return res.status(404).json({ error: 'registro no encontrado', registroId: req.params.registroId });
+    }
+    if (ficha.bloqueado) {
+      return res.status(422).json({
+        error: 'resumen bloqueado por el verificador P6: no se genera PDF',
+        motivoBloqueo: ficha.motivoBloqueo,
+      });
+    }
+    const buffer = await generarPdfFicha(ficha);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="ficha-${ficha.registro.id}.pdf"`);
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ error: 'no se pudo generar la ficha', detalle: String(error.message) });
   }
 });
 

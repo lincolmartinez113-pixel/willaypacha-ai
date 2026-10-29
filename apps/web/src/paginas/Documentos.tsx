@@ -39,6 +39,7 @@ export default function Documentos() {
 
   const [rol, setRol] = useState('verificador');
   const [clave, setClave] = useState('');
+  const [fichaRegistroId, setFichaRegistroId] = useState('SR-001-chognacota-agua');
   const [docActivo, setDocActivo] = useState<string | null>(null);
   const [expertoNombre, setExpertoNombre] = useState('');
   const [expertoColegiatura, setExpertoColegiatura] = useState('');
@@ -159,6 +160,29 @@ export default function Documentos() {
         </form>
         {error && <div className="aviso rojo mt-1"><Icono nombre="alerta" tamano={16} /><span>{error}</span></div>}
         {aviso && <div className="aviso exito mt-1"><Icono nombre="verificado" tamano={16} /><span>{aviso}</span></div>}
+      </section>
+
+      <section className="placa esquinas surge surge-2">
+        <div className="placa-cintillo"><span>Ficha de registro verificado</span></div>
+        <p className="mini texto-2">
+          Un solo PDF por registro: resumen aprobado por el verificador P6, cita completa con organismo,
+          documento y fecha, semáforo, pendientes declarados y bloque de revisión experta vacío y pendiente
+          (sin firma ni aprobación inventadas). Lleva su Registro de Generación en el pie.
+        </p>
+        <div className="fila">
+          <div className="campo" style={{ minWidth: 280, flex: 1 }}>
+            <label htmlFor="ficha-registro">Registro</label>
+            <select id="ficha-registro" value={fichaRegistroId} onChange={(e) => setFichaRegistroId(e.target.value)}>
+              {SEMILLA.registros.map((r) => (
+                <option key={r.id} value={r.id}>{r.id} · {r.cuerpoAgua ?? r.componente ?? r.parametro}</option>
+              ))}
+            </select>
+          </div>
+          <a className="boton secundario pequeno" href={`/api/documentos/registro/${fichaRegistroId}/pdf`} download={`ficha-${fichaRegistroId}.pdf`}>
+            <Icono nombre="documento" tamano={13} />
+            Descargar ficha PDF
+          </a>
+        </div>
       </section>
 
       <section className="placa surge surge-2">
