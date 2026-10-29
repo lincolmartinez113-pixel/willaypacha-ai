@@ -100,6 +100,10 @@ function pendientes(r) {
 const GLOSARIO = JSON.parse(readFileSync(new URL('../../i18n/glosario.json', import.meta.url), 'utf8'));
 const INDICE_GLOSARIO = Object.fromEntries(Object.entries(GLOSARIO.terminos).map(([k, v]) => [normalizar(k), v]));
 
+export function traducirConGlosario(texto, lengua) {
+  return aplicarLengua(texto, lengua);
+}
+
 function aplicarLengua(texto, lengua) {
   if (lengua === 'es') return { textoLengua: null, estadoTraduccion: null, terminos: [] };
   const terminos = [];

@@ -34,8 +34,10 @@ export function estadoMeta() {
 /**
  * Variante que además devuelve el uso de tokens reportado por la API
  * (`usage`), el `finish_reason` y la negativa (`refusal`) del modelo.
+ * La usan /api/vivo-prueba y la ruta en vivo de /api/explicar.
  * El texto se extrae con extraerTextoContenido (cadena, bloques o null).
- * No altera a chatCompletion: la ruta de /api/explicar queda intacta.
+ * chatCompletion queda como variante simple sin uso reportado.
+ * No altera la firma de chatCompletion.
  */
 /**
  * Extrae el texto mostrable de un mensaje de chat completion.

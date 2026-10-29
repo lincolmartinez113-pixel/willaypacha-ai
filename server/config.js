@@ -23,7 +23,7 @@ export const config = {
   meta: {
     apiKey: env('META_API_KEY', ''),
     apiBase: env('META_API_BASE', 'https://api.meta.ai/v1'),
-    modelo: env('META_MODEL', 'muse-spark'),
+    modelo: env('META_MODEL', 'muse-spark-1.3'),
     modeloVoz: env('META_VOICE_MODEL', 'muse-voice'),
     modeloSegmentacion: env('META_SEGMENT_MODEL', 'sam-3.1'),
   },

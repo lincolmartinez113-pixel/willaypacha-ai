@@ -1,10 +1,27 @@
-import { estadoMeta, chatCompletion, MetaApiError, registroGeneracionEnVivo } from './meta-client.js';
+import { estadoMeta, chatCompletionConUso, MetaApiError, registroGeneracionEnVivo } from './meta-client.js';
 import { cargarPrompts, versionPrompt } from './prompts.js';
-import { responderDemo } from './explicador-demo.js';
+import { responderDemo, traducirConGlosario } from './explicador-demo.js';
 import { verificarTexto } from './verificador.js';
-import { leerSeed } from '../config.js';
+import { config, leerSeed } from '../config.js';
+import { estimarCosto, motivoBloqueoIntegracion } from './vivo-prueba.js';
 
 const prompts = cargarPrompts();
+
+// Tope de tokens de salida en vivo, PROPIO de /api/explicar (no reutiliza
+// el de /api/vivo-prueba: su prompt es distinto y razona más).
+// Medición en vivo 2026-10-29 (muse-spark-1.3, consulta libre con el
+// contexto completo de 8 registros, P2): prompt 1633 tokens,
+// completion 2432 = 2304 de razonamiento interno + ~128 visibles,
+// finish_reason=stop en 8,7 s. Con el tope anterior de 2000 el presupuesto
+// se agotaba en razonamiento (finish_reason=length, content nulo) y el
+// endpoint caía al fallback declarado (incidente 29/10 12:52).
+// 6000 ≈ 2,5× la completion observada: cubre el razonamiento medido, la
+// respuesta completa de 90 palabras y margen para la variabilidad entre
+// corridas. /api/vivo-prueba queda en 2000: su prompt (1 registro,
+// pregunta fijada) razona menos (198–889 medidos) y funciona con ese tope.
+// Si algún día se alcanza, la causa se declara y nada parcial se muestra.
+export const MAX_TOKENS_EXPLICAR = 6000;
+const TIMEOUT_VIVO_MS = 20000;
 
 function nombresTerceros() {
   const seed = leerSeed();
@@ -32,7 +49,12 @@ function verificacionFinal(texto, registros, extra = {}) {
 export async function explicar({ consulta = '', registroId = null, lengua = 'es' }) {
   const meta = estadoMeta();
 
-  // ---- Ruta en vivo (Muse Spark) ----
+  // ---- Ruta en vivo (Muse Spark vía Meta Model API) ----
+  // Misma integración ya probada en /api/vivo-prueba: extracción de texto
+  // en cadena/bloques/null, finish_reason, costo y tokens de razonamiento
+  // reportados; el tope es propio (MAX_TOKENS_EXPLICAR). P6 en código decide
+  // antes de mostrar;
+  // lo no aprobado nunca se muestra: se responde con el explicador-demo.
   if (meta.habilitada) {
     try {
       const seed = leerSeed();
@@ -47,79 +69,88 @@ export async function explicar({ consulta = '', registroId = null, lengua = 'es'
         })),
       );
 
-      const textoBruto = await chatCompletion(
-        [
-          { role: 'system', content: prompts['P2-explicador-es'].contenido },
-          { role: 'user', content: `Consulta de la comunidad: «${consulta}». Registros verificados disponibles: ${contexto}` },
-        ],
-        { temperatura: 0.2, maxTokens: 700, promptVersion: prompts['P2-explicador-es'].version },
+      const mensajes = [
+        { role: 'system', content: prompts['P2-explicador-es'].contenido },
+        { role: 'user', content: `Consulta de la comunidad: «${consulta}». Registros verificados disponibles: ${contexto}` },
+      ];
+      const { texto, uso, finishReason, negativa } = await chatCompletionConUso(
+        mensajes,
+        { temperatura: 0.2, maxTokens: MAX_TOKENS_EXPLICAR, promptVersion: prompts['P2-explicador-es'].version, timeoutMs: TIMEOUT_VIVO_MS },
       );
+      const costoEstimado = estimarCosto({ uso, textoEntrada: JSON.stringify(mensajes), textoSalida: texto });
+      const citas = registrosRelevantes.map((r) => ({
+        registroId: r.id, organismo: r.fuente.organismo, documento: r.fuente.documento,
+        url: r.fuente.url, busqueda: r.fuente.busqueda, fecha: r.fecha,
+        semaforo: r.semaforo, citaLiteral: r.citaLiteral, hashDocumento: r.hashDocumento,
+      }));
+      const fuentesRegistro = registrosRelevantes.map((r) => ({ id: r.id, hash: r.hashDocumento }));
 
-      let texto = textoBruto;
-      if (lengua !== 'es') {
-        const enLengua = await chatCompletion(
-          [
-            { role: 'system', content: prompts['P3-explicador-lengua'].contenido },
-            { role: 'user', content: `Texto en español: «${textoBruto}». Lengua destino: ${lengua}.` },
-          ],
-          { temperatura: 0.2, maxTokens: 500, promptVersion: prompts['P3-explicador-lengua'].version },
-        );
-        try {
-          const parseado = JSON.parse(enLengua);
-          texto = parseado.texto_lengua || textoBruto;
-        } catch {
-          // Si P3 no devuelve JSON válido, la salida en lengua NO se publica:
-          // solo el texto en español verificado.
-          texto = textoBruto;
-        }
+      // Causa de integración (vacía/truncada) antes que P6: P6 decide solo
+      // sobre texto completo. En ambos casos, lo no aprobado no se muestra y
+      // se responde con el explicador-demo declarado.
+      const bloqueoIntegracion = motivoBloqueoIntegracion({ texto, finishReason, negativa, uso, maxTokens: MAX_TOKENS_EXPLICAR });
+      if (bloqueoIntegracion) {
+        const demo = responderDemo({ consulta, registroId, lengua });
+        return {
+          ...cerrarDemo(demo, `llamada en vivo no mostrable (${bloqueoIntegracion.causa}): ${bloqueoIntegracion.motivo}`),
+          finishReason: finishReason ?? null,
+          costoEstimado,
+        };
       }
 
-      // Verificación en vivo (P6) con fail-closed.
-      let verificacionViva = null;
-      try {
-        const respuestaP6 = await chatCompletion(
-          [
-            { role: 'system', content: prompts['P6-verificador'].contenido },
-            { role: 'user', content: `Texto: «${texto}». Fuentes: ${contexto}` },
-          ],
-          { temperatura: 0, maxTokens: 900, promptVersion: prompts['P6-verificador'].version },
-        );
-        verificacionViva = JSON.parse(respuestaP6);
-      } catch {
-        verificacionViva = null; // fail-closed: cae a la verificación en código
-      }
-
+      // P6 en código ANTES de mostrar (sin debilitar: misma barrera que demo
+      // y que /api/vivo-prueba). Si bloquea, demo declarado, nunca el texto.
       const resultado = verificacionFinal(texto, registrosRelevantes, {});
-      const verificacion = verificacionViva?.aprobado === false
-        ? { ...resultado, verificacionViva, bloqueado: true, texto: 'No consta. El verificador P6 bloqueó la salida.' }
-        : resultado;
+      if (resultado.bloqueado) {
+        const demo = responderDemo({ consulta, registroId, lengua });
+        return {
+          ...cerrarDemo(demo, `texto en vivo bloqueado por P6 y no mostrado: ${resultado.verificacion.motivoBloqueo}`),
+          finishReason: finishReason ?? null,
+          costoEstimado,
+        };
+      }
 
+      // Texto en vivo aprobado. La salida en lengua usa el glosario aprobado
+      // de forma determinista (misma regla P3 que demo): evita una segunda
+      // llamada libre en lenguas originarias sin verificación P6.
+      const trad = traducirConGlosario(texto, lengua);
       return {
-        ...verificacion,
+        bloqueado: false,
         modo: 'en-vivo',
+        modelo: config.meta.modelo,
+        apiBase: config.meta.apiBase,
+        texto,
+        textoLengua: trad.textoLengua,
+        estadoTraduccion: trad.estadoTraduccion,
+        terminosGlosario: trad.terminos,
+        motivo: 'explicación en vivo verificada por P6',
+        finishReason: finishReason ?? null,
+        costoEstimado,
+        verificacion: resultado.verificacion,
+        citas,
         registroGeneracion: {
           ...registroGeneracionEnVivo({
-            promptNombre: 'P2+P3+P6',
-            promptVersion: `${versionPrompt('P2-explicador-es')}+${versionPrompt('P6-verificador')}`,
-            fuentes: registrosRelevantes.map((r) => ({ id: r.id, hash: r.hashDocumento })),
+            promptNombre: 'P2-explicador-es',
+            promptVersion: prompts['P2-explicador-es'].version,
+            fuentes: fuentesRegistro,
           }),
-          verificacion: verificacion.verificacion,
+          verificacion: resultado.verificacion,
         },
-        citas: registrosRelevantes.map((r) => ({
-          registroId: r.id, organismo: r.fuente.organismo, documento: r.fuente.documento,
-          url: r.fuente.url, busqueda: r.fuente.busqueda, fecha: r.fecha,
-          semaforo: r.semaforo, citaLiteral: r.citaLiteral, hashDocumento: r.hashDocumento,
-        })),
       };
     } catch (error) {
       if (error instanceof MetaApiError && error.codigo === 'SIN_CREDITOS') {
-        // Protocolo: ante 402, detenerse y reportar; nunca cambiar de proveedor.
+        // Protocolo: ante 402, detenerse y reportar; nunca cambiar de
+        // proveedor. Se responde con el explicador-demo declarado.
+        const demo = responderDemo({ consulta, registroId, lengua });
         return {
-          bloqueado: true,
-          modo: 'en-vivo',
+          ...cerrarDemo(demo, 'créditos de la Meta Model API agotados (402): respuesta demo declarada; según el protocolo, no se sustituye el proveedor'),
           error: 'SIN_CREDITOS',
-          texto: 'El servicio de IA en vivo está detenido: créditos de la Meta Model API agotados (402). Según el protocolo, no se sustituye el proveedor.',
-          verificacion: { aprobado: false, afirmaciones: [], motivoBloqueo: 'créditos agotados' },
+        };
+      }
+      if (error?.name === 'TimeoutError' || error?.name === 'AbortError') {
+        const demo = responderDemo({ consulta, registroId, lengua });
+        return {
+          ...cerrarDemo(demo, `llamada en vivo agotó el tiempo (${TIMEOUT_VIVO_MS / 1000} s): respuesta demo declarada, sin reintento automático`),
         };
       }
       // Otros errores: caída declarada al modo demo (no silenciosa).
@@ -128,7 +159,7 @@ export async function explicar({ consulta = '', registroId = null, lengua = 'es'
     }
   }
 
-  // ---- Ruta demo ----
+  // ---- Ruta demo (sin META_API_KEY: nada en vivo, nada simulado) ----
   const demo = responderDemo({ consulta, registroId, lengua });
   return cerrarDemo(demo, null);
 }
@@ -136,6 +167,7 @@ export async function explicar({ consulta = '', registroId = null, lengua = 'es'
 function cerrarDemo(demo, motivoCaida) {
   const resultado = verificacionFinal(demo.partes, demo.fuentesParaVerificar);
   const textoFinal = resultado.bloqueado ? 'No consta. (P6 bloqueó la salida.)' : demo.texto;
+  const notaBase = 'Respuesta anclada a data/datos-semilla.json. Si META_API_KEY se configura, esta consulta se responde en vivo con Muse Spark bajo el mismo verificador.';
   return {
     bloqueado: resultado.bloqueado,
     modo: 'demo',
@@ -153,7 +185,7 @@ function cerrarDemo(demo, motivoCaida) {
       fecha: new Date().toISOString(),
       fuentes: demo.citas.map((c) => ({ id: c.registroId, hash: c.hashDocumento })),
       verificacion: resultado.verificacion,
-      nota: 'Respuesta anclada a data/datos-semilla.json. Si META_API_KEY se configura, esta consulta se responde en vivo con Muse Spark bajo el mismo verificador.',
+      nota: motivoCaida ? `${notaBase} Fallback declarado: ${motivoCaida}` : notaBase,
     },
   };
 }

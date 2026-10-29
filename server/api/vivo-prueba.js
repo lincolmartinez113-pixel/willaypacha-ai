@@ -84,7 +84,7 @@ export function estimarCosto({ uso = null, textoEntrada = '', textoSalida = '' }
  * motivo real y un texto sustituto fijo («No consta…»). Nunca expone texto
  * del modelo sin aprobación: vacía o truncada, la salida no se muestra.
  */
-export function motivoBloqueoIntegracion({ texto = '', finishReason = null, negativa = null, uso = null } = {}) {
+export function motivoBloqueoIntegracion({ texto = '', finishReason = null, negativa = null, uso = null, maxTokens = MAX_TOKENS_VIVO_PRUEBA } = {}) {
   const hayTexto = String(texto || '').trim().length > 0;
   const salida = uso?.completion_tokens;
   const razonamiento = uso?.completion_tokens_details?.reasoning_tokens;
@@ -104,7 +104,7 @@ export function motivoBloqueoIntegracion({ texto = '', finishReason = null, nega
   if (finishReason === 'length') {
     return {
       causa: 'respuesta-truncada',
-      motivo: `La respuesta llegó truncada por el tope de tokens (finish_reason: length, max_tokens: ${MAX_TOKENS_VIVO_PRUEBA}). Un texto cortado no se presenta como completo: nada se muestra.`,
+      motivo: `La respuesta llegó truncada por el tope de tokens (finish_reason: length, max_tokens: ${maxTokens}). Un texto cortado no se presenta como completo: nada se muestra.`,
       texto: 'No consta. La respuesta en vivo llegó truncada por el tope de tokens (ver «motivoBloqueo»); un texto cortado no se presenta como completo.',
     };
   }

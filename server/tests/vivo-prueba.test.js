@@ -64,7 +64,7 @@ describe('POST /api/vivo-prueba', () => {
     assert.equal(r.status, 200);
     assert.equal(llamadas.length, 1);
     assert.equal(llamadas[0].url, 'https://api.meta.ai/v1/chat/completions');
-    assert.equal(llamadas[0].body.model, 'muse-spark');
+    assert.equal(llamadas[0].body.model, 'muse-spark-1.3');
     assert.equal(llamadas[0].body.max_tokens, 2000);
     assert.ok(llamadas[0].body.messages[1].content.includes('Chogñacota'), 'la pregunta va anclada al registro semilla');
 
