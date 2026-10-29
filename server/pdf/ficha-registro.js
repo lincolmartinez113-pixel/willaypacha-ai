@@ -64,7 +64,11 @@ export function prepararFicha(registro, resumenPartes) {
     verificacion,
     registroGeneracion: {
       modo: meta.modo,
-      modelo: meta.habilitada ? meta.modelo : 'generador-demo (sin Meta Model API en vivo)',
+      // El resumen SIEMPRE viene del explicador-demo (construirFicha usa
+      // responderDemo), en modo demo y en modo en-vivo: atribuirlo al
+      // modelo en vivo sería falso. El origen explícito lo declara.
+      modelo: 'explicador-demo (verificado por P6)',
+      origen: 'Resumen del explicador-demo, verificado por P6 en código antes de entrar al PDF; no se generó en vivo en esta ficha',
       prompt: `P2 ${versionPrompt('P2-explicador-es')} · P6 ${versionPrompt('P6-verificador')}`,
       versionP6: versionPrompt('P6-verificador'),
       fecha: new Date().toISOString(),
@@ -84,7 +88,7 @@ export function construirFicha(registroId) {
 
 function textoRegistroGeneracion(rg) {
   const f = rg.fuentes.map((x) => `${x.id}${x.hash ? ` (sha256 ${x.hash.slice(0, 12)}…)` : ' (hash pendiente)'}`).join(', ');
-  return `Registro de Generación IA · modo: ${rg.modo} · modelo: ${rg.modelo} · fecha: ${rg.fecha} · P6: ${rg.versionP6} · prompt: ${rg.prompt} · fuentes: ${f} · revisión experta: PENDIENTE (sin firma)`;
+  return `Registro de Generación IA · ${rg.origen} · modo: ${rg.modo} · modelo: ${rg.modelo} · fecha: ${rg.fecha} · P6: ${rg.versionP6} · prompt: ${rg.prompt} · fuentes: ${f} · revisión experta: PENDIENTE (sin firma)`;
 }
 
 function bandas(doc, ficha) {

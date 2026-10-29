@@ -36,6 +36,10 @@ describe('Ficha de registro verificado (PDF)', () => {
     assert.ok(ficha.pendientes.some((p) => /Fecha exacta.*confirmar/i.test(p)), 'fecha exacta por confirmar');
     assert.equal(ficha.registroGeneracion.modo, 'demo');
     assert.ok(ficha.registroGeneracion.modelo);
+    assert.match(ficha.registroGeneracion.modelo, /explicador-demo/);
+    assert.match(ficha.registroGeneracion.origen, /explicador-demo/);
+    assert.match(ficha.registroGeneracion.origen, /verificado por P6/);
+    assert.match(ficha.registroGeneracion.origen, /no se generó en vivo en esta ficha/);
     assert.ok(ficha.registroGeneracion.fecha);
     assert.match(ficha.registroGeneracion.versionP6, /^v1-[0-9a-f]{8}$/);
     assert.equal(ficha.registroGeneracion.fuentes[0].id, 'SR-001-chognacota-agua');
@@ -77,6 +81,9 @@ describe('Ficha de registro verificado (PDF)', () => {
     assert.match(texto, /sin firma/);
     assert.match(texto, /Registro\s*de\s*Generación\s*IA/);
     assert.match(texto, /P6: v1-[0-9a-f]{8}/);
+    assert.match(texto, /explicador-demo/);
+    assert.match(texto, /verificado\s*por\s*P6/);
+    assert.match(texto, /no\s*se\s*generó\s*en\s*vivo\s*en\s*esta\s*ficha/);
     assert.doesNotMatch(texto, /Aprobado por|Aprobada por/);
   });
 
