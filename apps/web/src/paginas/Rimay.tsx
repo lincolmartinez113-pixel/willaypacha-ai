@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api, type ResultadoExplicacion } from '../api';
 import { useLengua } from '../i18n';
 import Icono from '../componentes/Icono';
@@ -12,6 +12,67 @@ interface Reconocimiento {
   onresult: ((evento: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
   onend: (() => void) | null;
   onerror: (() => void) | null;
+}
+
+/**
+ * Único camino de voz de salida: síntesis del propio navegador
+ * (Web Speech API, speechSynthesis). Lee en voz alta el texto YA mostrado
+ * y verificado por P6; no genera contenido nuevo. Se etiqueta siempre como
+ * voz sintética del navegador: nunca como MMS ni como hablante nativo.
+ * Una lengua se habla SOLO si el navegador expone una voz genuina de esa
+ * lengua (prefijos abajo); si no, se declara indisponible. En particular,
+ * el texto en lengua originaria jamás se lee con voz española (pronunciaría
+ * mal y engañaría). La ruta MMS del servidor queda como declara el backend
+ * (/api/idiomas/disponibilidad): no habilitada en esta instancia.
+ */
+const PREFIJOS_VOZ: Record<string, string[]> = {
+  es: ['es-pe', 'es-es', 'es'],
+  qu: ['qu', 'quz', 'quy'],
+  ay: ['ay', 'ayr'],
+  ash: ['cni', 'ash'],
+};
+
+const NOMBRE_LENGUA: Record<string, string> = {
+  es: 'español',
+  qu: 'quechua',
+  ay: 'aimara',
+  ash: 'asháninka',
+};
+
+const CHECKPOINT_MMS: Record<string, string> = {
+  qu: 'facebook/mms-tts-quz',
+  ay: 'facebook/mms-tts-ayr',
+  ash: 'facebook/mms-tts-cni',
+};
+
+/** Voces del navegador; en Chrome cargan de forma asíncrona. */
+function obtenerVoces(): Promise<SpeechSynthesisVoice[]> {
+  const sint = window.speechSynthesis;
+  const cargadas = sint.getVoices();
+  if (cargadas.length > 0) return Promise.resolve(cargadas);
+  return new Promise((resolver) => {
+    let listo = false;
+    const fin = () => {
+      if (listo) return;
+      listo = true;
+      resolver(sint.getVoices());
+    };
+    const previo = sint.onvoiceschanged;
+    sint.onvoiceschanged = () => {
+      sint.onvoiceschanged = previo;
+      fin();
+    };
+    window.setTimeout(fin, 1500);
+  });
+}
+
+function elegirVoz(voces: SpeechSynthesisVoice[], lengua: string): SpeechSynthesisVoice | null {
+  const prefs = PREFIJOS_VOZ[lengua] ?? [];
+  for (const pref of prefs) {
+    const voz = voces.find((v) => v.lang.toLowerCase().replace('_', '-').startsWith(pref));
+    if (voz) return voz;
+  }
+  return null;
 }
 
 const CONSULTAS_RAPIDAS: { texto: string; icono: 'gota' | 'capas' | 'balanza' | 'verificado' }[] = [
@@ -29,7 +90,13 @@ export default function Rimay() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ttsEstado, setTtsEstado] = useState<string | null>(null);
+  const [reproduciendo, setReproduciendo] = useState(false);
   const reconocimiento = useRef<Reconocimiento | null>(null);
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const soportaVoz = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
 
@@ -60,6 +127,8 @@ export default function Rimay() {
 
   async function preguntar(texto: string) {
     if (!texto.trim()) return;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    setReproduciendo(false);
     setCargando(true);
     setError(null);
     setTtsEstado(null);
@@ -75,19 +144,54 @@ export default function Rimay() {
   }
 
   async function escucharRespuesta() {
-    if (!respuesta) return;
-    setTtsEstado('Consultando la disponibilidad de voz sintética…');
-    const disp = await api.disponibilidadTts();
-    const info = disp?.tts?.[lengua === 'es' ? 'qu' : lengua];
-    if (lengua === 'es') {
-      setTtsEstado('La síntesis de las lenguas originarias (MMS de Meta) se ejecuta solo en el servidor; en esta instancia no está habilitada y así se declara.');
+    if (!respuesta || respuesta.bloqueado) return;
+    if (!('speechSynthesis' in window)) {
+      setTtsEstado('Voz no disponible: este navegador no ofrece síntesis de voz (Web Speech API). La respuesta verificada escrita sigue arriba.');
       return;
     }
-    if (info && info.disponible === false) {
-      setTtsEstado(`Voz sintética no disponible en esta instancia (${info.checkpoint} · ${info.licencia}). ${String(info.motivo || '')}`);
-    } else {
-      setTtsEstado('Voz sintética no disponible: el servidor declaró indisponibilidad.');
+    const sint = window.speechSynthesis;
+    if (reproduciendo) {
+      sint.cancel();
+      setReproduciendo(false);
+      setTtsEstado('Reproducción detenida.');
+      return;
     }
+    // Texto a leer: el YA mostrado y verificado por P6. En lengua
+    // originaria se lee el texto en lengua; nunca se sustituye por
+    // español ni se lee con voz de otra lengua.
+    const texto = lengua === 'es' ? respuesta.texto : respuesta.textoLengua;
+    if (!texto || !texto.trim()) {
+      setTtsEstado(`Voz no disponible en ${NOMBRE_LENGUA[lengua] ?? lengua}: no hay texto en esa lengua para leer. La respuesta escrita verificada sigue arriba.`);
+      return;
+    }
+    setTtsEstado('Buscando una voz de esta lengua en el navegador…');
+    const voz = elegirVoz(await obtenerVoces(), lengua);
+    if (!voz) {
+      if (lengua === 'es') {
+        setTtsEstado('Voz no disponible: este navegador no trae ninguna voz en español. La respuesta verificada escrita sigue arriba.');
+      } else {
+        setTtsEstado(
+          `Voz no disponible en ${NOMBRE_LENGUA[lengua] ?? lengua}: este navegador no trae voz de esa lengua y la síntesis MMS del servidor no está habilitada en esta instancia ` +
+          `(requiere IDIOMAS_TTS_HABILITADO=true y el checkpoint ${CHECKPOINT_MMS[lengua] ?? lengua}, ~145 MB, descargado; no se ha descargado). ` +
+          'La respuesta escrita verificada sigue arriba. Nada se simula.',
+        );
+      }
+      return;
+    }
+    sint.cancel();
+    const mensaje = new SpeechSynthesisUtterance(texto);
+    mensaje.lang = voz.lang;
+    mensaje.onend = () => {
+      setReproduciendo(false);
+      setTtsEstado(`Reproducción terminada. Voz sintética del navegador: ${voz.name} (${voz.lang}). No es MMS ni voz de hablante nativo.`);
+    };
+    mensaje.onerror = () => {
+      setReproduciendo(false);
+      setTtsEstado('La reproducción falló en el navegador. La respuesta verificada escrita sigue arriba.');
+    };
+    setReproduciendo(true);
+    setTtsEstado(`Reproduciendo con voz sintética del navegador: ${voz.name} (${voz.lang}). No es MMS ni voz de hablante nativo.`);
+    sint.speak(mensaje);
   }
 
   const terminosVisibles = respuesta?.terminosGlosario ?? [];
@@ -219,9 +323,13 @@ export default function Rimay() {
                   ))}
 
                   <div className="fila mt-1">
-                    <button className="boton secundario pequeno" onClick={escucharRespuesta}>
+                    <button
+                      className="boton secundario pequeno"
+                      onClick={escucharRespuesta}
+                      aria-label={reproduciendo ? 'Detener la reproducción' : 'Escuchar la respuesta en voz alta'}
+                    >
                       <Icono nombre="pulso" tamano={14} />
-                      Escuchar respuesta
+                      {reproduciendo ? 'Detener' : 'Escuchar respuesta'}
                     </button>
                   </div>
                   {ttsEstado && <div className="aviso neutro mt-05"><Icono nombre="info" tamano={15} /><span>{ttsEstado}</span></div>}
