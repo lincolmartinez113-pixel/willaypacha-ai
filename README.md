@@ -1,88 +1,89 @@
 # WillayPacha AI
-## Declaración de trabajo previo y trabajo en ventana
 
-Preparación previa (antes del 27 de octubre de 2026):
-kit de preparación, PROMPT_MAESTRO, datos semilla curados de fuentes
-públicas de OEFA y SENACE, y código base generado el 21 de octubre de 2026.
+## Declaración obligatoria: preparación previa vs. trabajo del hackathon
 
-Trabajo en ventana (27 de octubre al 4 de noviembre de 2026):
-correcciones del verificador P6 y del explicador-demo, incluidas las
-trampas 7 y 8, la consulta general y la reparación de codificación,
-con regresión verificada el 27 de octubre de 2026: npm test 61/61
-y build correcto. Las integraciones en vivo con Meta, SAM y voz,
-y el video demo, se registran en CHANGELOG-VENTANA.md a medida que
-se completan, y no se afirman antes de probarse.
+El kit, el PROMPT y los datos son preparación previa; solo el código con commits del 27 de octubre al 4 de noviembre es trabajo del hackathon.
 
-**Community environmental monitoring and indigenous justice in Peru** — Meta Global AI Developer Hackathon · Indie track · *Build for Your World*
+---
 
-> **What this is.** WillayPacha AI makes official Peruvian environmental information — today scattered across technical portals, written in legal Spanish, buried in hundred-page PDFs — actually accessible to Quechua, Aymara and Asháninka communities living next to mining units. Every fact shown carries **source, date and literal citation**; every generated text passes a **verifier (P6)** that blocks unsupported claims; every legal document is a **draft** until a licensed professional approves it. The platform never presents a complaint on anyone's behalf: the community decides, the expert answers, the machine prepares.
+# ESPAÑOL
 
-> **What is real, what is demo, what is validated.** This instance runs in **declared DEMO mode** (no `META_API_KEY`): AI answers are anchored to curated seed data (`data/datos-seed.json`) instead of live Muse Spark calls, and every unavailable capability (live SAM 3.1 segmentation, MMS speech synthesis, Muse Voice transcription) is **declared, never simulated**. The two demo territories are **real, publicly sourced units** (San Rafael/Minsur, Puno — OEFA causality evaluation; San Vicente/SIMSA, Junín — full OEFA procedural chain 2024–2025). Interface text is **Spanish** (complete); Quechua, Aymara and Asháninka packages are **marked as drafts** pending validation by registered speakers/interpreters. The Aymara territory ships **empty with a visible "in preparation" notice** — declaring a gap is stronger than faking one.
+## 1. Qué hace WillayPacha AI
 
-**Stack:** React 18 + TypeScript PWA (Vite, offline-first with service worker) · Node/Express backend (the only holder of the API key) · PDFKit documents · Leaflet map · node:test suite including the mandated **10 trap-questions battery** · Meta ecosystem adapters: Muse Spark (chat/completions, OpenAI-compatible), SAM 3.1 (segmentation endpoint), Muse Voice (transcription), MMS / NLLB-200 / Omnilingual ASR for indigenous-language voice (server-side only).
+WillayPacha AI acerca información ambiental oficial del Perú (OEFA, SENACE) a comunidades junto a unidades mineras: ordena documentos públicos por unidad minera, distingue ECA de LMP, explica por texto y voz en español con fuente, fecha y cita literal, y genera una ficha PDF en borrador por registro verificado. Ningún texto generado se muestra sin pasar por el verificador P6; ningún documento vale sin revisión experta.
 
-**Run it:**
+## 2. Unidades demo
 
-> **Si al abrir `index.html` con doble clic sale en blanco** — es un límite de los navegadores con `file://`, no del proyecto. Usa la **Opción 1** (archivo único, diseñado exactamente para eso) o la **Opción 2**.
+Dos unidades reales con datos semilla públicos curados (`data/datos-semilla.json`):
 
-**Opción 1 · Doble clic (sin instalar nada):** abre `apps/web/standalone/index.html` — un único archivo HTML con toda la app embebida y rutas hash, verificado renderizando bajo `file://` (`npm run test:visual`, capturas en `docs/evidencia/`). Sin backend, el Radar y las páginas legales funcionan completos; el asistente declara que el servidor no responde.
+- **San Rafael — Minsur S.A.** (Puno). Unidad `san-rafael`: Nueva Acumulación Quenamari – San Rafael.
+- **San Vicente — SIMSA** (Junín). Unidad `san-vicente`: Compañía Minera San Ignacio de Morococha S.A.A. (SIMSA).
 
-**Opción 2 · Desarrollo completo (recomendada):**
+## 3. Cómo correrlo en local
+
+Comandos reales de `package.json` (no hay otros; no usar `npm start` ni `npm run dev`, que no existen):
 
 ```bash
 npm install
-npm test              # data verifier (fails build on missing source/date/citation) + 57 tests
-npm run dev:server    # backend on :8787 (demo mode without META_API_KEY)
-npm run dev:web       # frontend on :5173 (proxies /api)
+npm test                 # node tools/verificar-datos.mjs && node --test --test-concurrency=1 "server/tests/*.test.js"
+npm run verificar-datos  # node tools/verificar-datos.mjs
+npm run dev:server       # node server/index.js (backend en :8787 según PORT)
+npm run dev:web          # vite --config apps/web/vite.config.ts (Vite muestra la URL al arrancar)
+npm run build            # tsc --noEmit -p apps/web && vite build --config apps/web/vite.config.ts
+npm run build:standalone # vite build --config apps/web/vite.config.standalone.ts
+npm run test:visual      # node tools/verificar-visual.mjs
 ```
 
-**Opción 3 · Build de producción:** `npm run build` + `npx vite preview --config apps/web/vite.config.ts` (o `npm run build:standalone` para regenerar el archivo único).
+Sin `META_API_KEY` en `.env` (ver `.env.example`) el sistema corre en modo demo declarado: respuestas ancladas a los datos semilla, sin llamadas en vivo. Con la clave, usa la Meta Model API bajo el mismo verificador P6.
 
-Set `META_API_KEY` in `.env` (see `.env.example`) to switch the engine to live Meta Model API calls under the same verifier. The build agent this project was generated for, and its full construction protocol (10 staged audits, E0–E9), are documented in [`PROMPT_MAESTRO.md`](PROMPT_MAESTRO.md) and [`docs/auditorias/INFORME-ETAPAS.md`](docs/auditorias/INFORME-ETAPAS.md).
+## 4. Estado verificado
+
+- **Rimay en vivo con `muse-spark-1.3` y verificación P6.** La ruta en vivo (`server/api/explicador.js`) llama al modelo configurado en `META_MODEL` (por defecto `muse-spark-1.3`) y verifica el texto con P6 en código antes de mostrarlo; lo bloqueado no se muestra (se responde con el explicador demo declarado).
+- **Voz del navegador solo en español; lenguas originarias declaradas no disponibles sin MMS.** La app usa Web Speech API (`apps/web/src/paginas/Rimay.tsx`, reconocimiento `es-PE`); si el navegador no trae voz de la lengua o la síntesis MMS del servidor no está habilitada (`IDIOMAS_TTS_HABILITADO=false` por defecto, sin checkpoints en `server/idiomas/`), la interfaz lo declara y no simula audio.
+- **Ficha PDF por registro verificado, con revisión experta PENDIENTE.** Cada ficha (`server/pdf/ficha-registro.js`) resume un solo registro y pasa por P6 antes de entrar al PDF: si P6 bloquea, no hay PDF (422 declarado); si el registro no existe, 404 declarado. El bloque de revisión experta va vacío y pendiente: sin firma, sin nombre, sin colegiatura, sin fecha de revisión inventada.
+- **SAM 3.1 en vivo.** El endpoint de prueba (`server/api/sam-prueba.js`) llama `POST {META_API_BASE}/responses` con modelo `sam-3.1`, imagen y prompt fijados del proyecto; sin `META_API_KEY` responde 503 declarado y nunca inventa geometría.
+- **WhatsApp no implementado.** No disponible en esta demo; no se presenta como hecho.
 
 ---
 
-# WillayPacha AI (español)
+# ENGLISH
 
-**Monitoreo ambiental comunitario y justicia indígena en el Perú.** WillayPacha AI pone la información ambiental oficial del Estado peruano —hoy dispersa en portales técnicos, en español jurídico y en PDFs de cientos de páginas— al alcance real de las comunidades campesinas y nativas que viven junto a las unidades mineras. Toma los documentos públicos de OEFA, SENACE y ANA, los ordena por unidad minera y cuerpo de agua, los contrasta con la normativa (ECA y LMP, correctamente distinguidas), los explica por voz y texto en español, quechua, aimara y asháninka, recibe los casos de las comunidades con evidencia verificada, y genera documentos técnico-legales en borrador que solo valen cuando un experto colegiado los revisa y aprueba.
+## Mandatory declaration: prior preparation vs. hackathon work
 
-**La regla de oro:** ningún dato se muestra sin fuente, fecha y cita; ningún texto generado se publica sin pasar por el verificador; ningún documento sale sin revisión experta; ninguna etapa se da por terminada sin auditoría registrada. En un dominio donde una afirmación falsa puede dañar a una comunidad, la trazabilidad no es un adorno: es el producto.
+The kit, the PROMPT, and the data are prior preparation; only code with commits from October 27 to November 4 is hackathon work.
 
-## Qué es real, qué es demo, qué está validado
+## 1. What WillayPacha AI does
 
-- **Datos reales:** los dos territorios de la demo usan hallazgos públicos verificados — San Rafael (Minsur): Quebrada Chogñacota con superación de ECA atribuida al efluente P-4, Microcuenca Larancota sin hallazgo, sedimentos de origen natural, comunidades hidrobiológicas variables; San Vicente (SIMSA): las tres resoluciones de OEFA 2024–2025 (medidas preventivas → reconsideración parcial → tribunal). Valores LMP dígito a dígito del D.S. N.° 010-2010-MINAM, comprobados por script.
-- **Declarado como demo:** sin `META_API_KEY`, las respuestas de IA provienen del explicador demo anclado a los registros (pasando igual por el verificador P6); la segmentación es una heurística local de color declarada (NO es SAM 3.1); la voz sintética y la transcripción en vivo se declaran no disponibles (nunca se simulan).
-- **Pendiente de validación (y así se etiqueta):** los paquetes quechua/aimara/asháninka y el glosario (`i18n/glosario.json`) están en estado borrador hasta validación por hablantes o intérpretes registrados. El asháninka de NLLB-200 **no existe**: su ruta es glosario + P3 + P6. El territorio aimara (Altiplano Sur) se muestra vacío con su leyenda «en preparación».
-- **Pendiente de adjuntar:** páginas exactas de citas y hashes SHA-256 de los documentos primarios; el sistema los declara pendientes en vez de fabricarlos.
+WillayPacha AI brings official Peruvian environmental information (OEFA, SENACE) to communities next to mining units: it organizes public documents per mining unit, distinguishes ECA from LMP, explains by text and Spanish voice with source, date, and literal citation, and generates one draft PDF fiche per verified record. No generated text is shown without passing the P6 verifier; no document is valid without expert review.
 
-## Los cinco módulos
+## 2. Demo units
 
-| Módulo | Qué hace | Verificación |
-|---|---|---|
-| **A · Radar de Transparencia** | Mapa de las unidades, tabla «lo que dice la fuente vs. lo que vive la comunidad» con semáforo (ícono + texto, nunca solo color), línea de tiempo de fiscalización, normas ECA/LMP, bitácora y canal de rectificación | Cada fila abre su fuente primaria; script exige fuente+fecha+cita en el 100 % |
-| **B · Asistente Rimay** | Voz y texto en 4 lenguas; respuestas bilingües con estado de traducción; se presenta como IA; sin asesoría legal ni diagnósticos | Batería de 10 preguntas trampa en negativa correcta; glosario sin inventar equivalencias |
-| **C · Laboratorio de Evidencia** | Huella SHA-256 en el dispositivo, metadatos EXIF con opción de ocultarlos, delimitación de área visual anómala, Lámina exportable con leyenda obligatoria | Hash verificable; prohibido decir «contaminación detectada»; borrar la foto borra la lámina |
-| **D · Documentos y Expertos** | Acta bilingüe, Informe Técnico (tabla LMP citada), Denuncia SINADA/solicitud ANA; franja de borrador en cada página; flujo con bitácora; PDF final bloqueado hasta aprobación con colegiatura CIP/CAL | Transiciones de estado probadas; sin firmas ni fechas de presentación; Registro de Generación en el pie |
-| **E · Casos de la Comunidad** | Registro con consentimiento (Ley 29733) e identidad reservada; evidencia con cadena de custodia; filtro de cinco pasos; publicación con leyenda de alcance; retiro con borrado efectivo | Pruebas adversariales: duplicados, menores, dos revisores, retiro verificado, acceso denegado sin rol |
-| **Denunciar · Guía práctica** | Ruta completa: qué documentar, qué documentos se piden, ante qué autoridad según el hecho (OEFA/SINADA, ANA, FEMA, Defensoría, Cultura, salud), cómo presentar, seguir y mediar; vulnerabilidades y protección; triage de gravedad; versión borrador en lengua originaria | Contenido con base normativa citada (Ley 28611, 27446, 29735, 29733, D.S. 004-2017/010-2010); canales oficiales verificables; sin teléfonos ni plazos inventados |
+Two real units with curated public seed data (`data/datos-semilla.json`):
 
-## Verificación (protocolo del proyecto)
+- **San Rafael — Minsur S.A.** (Puno). Unit `san-rafael`: Nueva Acumulación Quenamari – San Rafael.
+- **San Vicente — SIMSA** (Junín). Unit `san-vicente`: Compañía Minera San Ignacio de Morococha S.A.A. (SIMSA).
+
+## 3. How to run it locally
+
+Real commands from `package.json` (there are no others; do not use `npm start` or `npm run dev`, which do not exist):
 
 ```bash
-npm test                 # verificador de datos + 57 pruebas node:test
-npm run verificar-datos  # falla si falta fuente/fecha/cita/confianza; LMP dígito a dígito
-node tools/smoke.mjs     # prueba de humo del motor (explicar + trampas)
-node tools/smoke-web.mjs # prueba HTTP de la app construida y del API
+npm install
+npm test                 # node tools/verificar-datos.mjs && node --test --test-concurrency=1 "server/tests/*.test.js"
+npm run verificar-datos  # node tools/verificar-datos.mjs
+npm run dev:server       # node server/index.js (backend on :8787 per PORT)
+npm run dev:web          # vite --config apps/web/vite.config.ts (Vite prints the URL on start)
+npm run build            # tsc --noEmit -p apps/web && vite build --config apps/web/vite.config.ts
+npm run build:standalone # vite build --config apps/web/vite.config.standalone.ts
+npm run test:visual      # node tools/verificar-visual.mjs
 ```
 
-Los informes de auditoría por etapa (E0–E9, con evidencia y veredicto ítem por ítem) están en
-`docs/auditorias/INFORME-ETAPAS.md`. La estructura del repositorio, las skills de agente y las
-automatizaciones de CI están documentadas en `PROMPT_MAESTRO.md` (Anexos).
+Without `META_API_KEY` in `.env` (see `.env.example`) the system runs in declared demo mode: answers anchored to the seed data, no live calls. With the key, it uses the Meta Model API under the same P6 verifier.
 
-## Licencias y terceros
+## 4. Verified status
 
-Modelos de Meta usados en la capa de lenguas: MMS (`facebook/mms-tts-quz|ayr|cni`, CC-BY-NC 4.0), NLLB-200 (CC-BY-NC 4.0, solo quy/ayr), Omnilingual ASR (Apache 2.0). SeamlessM4T queda **descartado** (su lista oficial no incluye estas lenguas). Detalle completo en [`TERCEROS.md`](TERCEROS.md).
-
----
-
-*WillayPacha AI — «willay» (informar, en quechua) + «pacha» (tiempo/territorio). Informar el territorio, con fuente.*
+- **Rimay live with `muse-spark-1.3` and P6 verification.** The live path (`server/api/explicador.js`) calls the model from `META_MODEL` (default `muse-spark-1.3`) and verifies the text with P6 in code before showing it; blocked text is never shown (a declared demo-explainer answer is returned instead).
+- **Browser voice in Spanish only; indigenous languages declared unavailable without MMS.** The app uses the Web Speech API (`apps/web/src/paginas/Rimay.tsx`, recognition `es-PE`); if the browser has no voice for the language or server MMS synthesis is not enabled (`IDIOMAS_TTS_HABILITADO=false` by default, no checkpoints in `server/idiomas/`), the UI declares it and never fakes audio.
+- **PDF fiche per verified record, with expert review PENDING.** Each fiche (`server/pdf/ficha-registro.js`) summarizes a single record and passes P6 before entering the PDF: if P6 blocks, no PDF is produced (declared 422); if the record does not exist, declared 404. The expert-review block is empty and pending: no signature, no name, no license number, no invented review date.
+- **SAM 3.1 live.** The test endpoint (`server/api/sam-prueba.js`) calls `POST {META_API_BASE}/responses` with model `sam-3.1`, fixed project image and prompt; without `META_API_KEY` it returns a declared 503 and never invents geometry.
+- **WhatsApp not implemented.** Not available in this demo; not presented as done.
